@@ -6,4 +6,10 @@ In this folder we test different ways to communicate backends: Julia, Node.js an
 
 2. Web Sockets
 
-3. ZeroMQ
+3. [ZeroMQ](http://zguide.zeromq.org/page:all)
+
+    Message patterns tested (built-in):
+
+    * Request-reply
+    * Pub-sub
+    * Push-pull
