@@ -9,3 +9,14 @@
 - The ventilator’s PUSH socket distributes tasks to workers (assuming they are all connected before the batch starts going out) evenly. This is called load balancing and it’s something we’ll look at again in more detail.
 
 - The sink’s PULL socket collects results from workers evenly. This is called fair-queuing.
+
+# Ventilator with KILL signal
+
+![imag](https://zguide.zeromq.org/images/fig19.png)
+
+How do we connect the sink to the workers? The PUSH/PULL sockets are one-way only. We could switch to another socket type, or we could mix multiple socket flows. Let’s try the latter: using a pub-sub model to send kill messages to the workers:
+
+- The sink creates a PUB socket on a new endpoint.
+- Workers connect their input socket to this endpoint.
+- When the sink detects the end of the batch, it sends a kill to its PUB socket.
+- When a worker detects this kill message, it exits.
