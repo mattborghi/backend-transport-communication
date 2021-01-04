@@ -16,4 +16,6 @@ while True:
     topic = "doggy dogs"
     messagedata = "Hello dogs from Python!"
     socket.send_string("%s %s" % (topic, messagedata))
+    # dont use a topic
+    # socket.send_string("something")
     time.sleep(3)
