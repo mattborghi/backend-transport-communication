@@ -1,0 +1,15 @@
+{
+  "name": "pub_sub",
+  "version": "1.0.0",
+  "description": "### Julia",
+  "main": "pubber.js",
+  "dependencies": {
+    "zeromq": "^5.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matias Borghi",
+  "license": "ISC"
+}
