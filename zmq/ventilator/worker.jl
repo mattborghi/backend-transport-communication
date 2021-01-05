@@ -9,9 +9,12 @@
 #
 
 using ZMQ
+println("Loading packages...")
+# Here we will load heavy packages
 
 context = Context()
 
+println("Connecting to servers..")
 # Socket to receive messages on
 receiver = Socket(context, PULL)
 connect(receiver, "tcp://localhost:5557")
@@ -23,7 +26,8 @@ connect(sender, "tcp://localhost:5558")
 # Process tasks forever
 while true
     s = recv(receiver, String)
-    
+    println("Working...")
+
     # Simple progress indicator for the viewer
     write(stdout, ".")
     flush(stdout)
