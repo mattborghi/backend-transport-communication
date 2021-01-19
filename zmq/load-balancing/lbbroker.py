@@ -37,7 +37,7 @@ def worker_task(ident):
     socket.send(b"READY")
 
     while True:
-        address, empty, request = socket.recv_multipart()  # Figure 4: three-parts messages
+        address, _, request = socket.recv_multipart()  # Figure 4: three-parts messages
         print("{}: {}".format(socket.identity.decode("ascii"),
                               request.decode("ascii")))
         socket.send_multipart([address, b"", b"OK"])
@@ -70,32 +70,38 @@ def main():
     poller.register(backend, zmq.POLLIN)
 
     while True:
+        # If there are currently events ready to be processed,
+        # this function will return immediately.
+        # Returns dict of the form socket : event_mask
+        # where in this case socket is frontend or backend
         sockets = dict(poller.poll())
 
         if backend in sockets:
             # Handle worker activity on the backend
             request = backend.recv_multipart()  # Figure 3: Five-part messages
-            worker, empty, client = request[:3]  # first 3 elems
+            worker, _, client = request[:3]  # first 3 elems
             if not workers:
                 # Poll for clients now that a worker is available
+                print("no workers available backends")
                 poller.register(frontend, zmq.POLLIN)
             workers.append(worker)
             if client != b"READY" and len(request) > 3:
                 # If client reply, send rest back to frontend
-                empty, reply = request[3:]
+                _, reply = request[3:]
                 frontend.send_multipart([client, b"", reply])
                 count -= 1
-                if not count:
+                if not count:  # enters when count = 0
                     break
 
         if frontend in sockets:
             # Get next client request, route to last-used worker
-            client, empty, request = frontend.recv_multipart()  # Figure 2
+            client, _, request = frontend.recv_multipart()  # Figure 2
             worker = workers.pop(0)
             backend.send_multipart(
                 [worker, b"", client, b"", request])  # Figure 3
             if not workers:
                 # Don't poll clients if no workers are available
+                print("no workers available frontend")
                 poller.unregister(frontend)
 
     # Clean up
