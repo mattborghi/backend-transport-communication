@@ -56,7 +56,7 @@ function main(connection::AbstractConnection)
     
     success, consumer_tag = basic_consume(chan, "task_queue", callback)
     
-    @assert success
+    success || ErrorException("There was an error!")
     # println("consumer registered with tag $consumer_tag")
 
     # go ahead with other stuff...
@@ -78,8 +78,8 @@ catch e
         # unsubscribe the consumer from the queue
         # basic_cancel(connection, consumer_tag)
     else
-        print("There was an error")
-        print(e)
+        println("There was an error")
+        println(e)
     end
     exit()
 end
