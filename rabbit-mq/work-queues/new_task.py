@@ -24,9 +24,10 @@ def main(message):
 
 if __name__ == '__main__':
     from random import randrange
-    NUM_TASKS = 5
-    MAX_NUMBER_SECONDS = 10
+    NUM_TASKS = 10
+    # MAX_NUMBER_SECONDS = 10
     for i in range(NUM_TASKS):
-        TASKS_TIME = randrange(1, MAX_NUMBER_SECONDS)
-        message = ''.join(['.' for i in range(TASKS_TIME)])
+        # TASKS_TIME = randrange(1, MAX_NUMBER_SECONDS)
+        TASKS_TIME = i
+        message = ''.join(['.' for i in range(1, TASKS_TIME)])
         main(message)
