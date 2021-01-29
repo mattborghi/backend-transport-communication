@@ -1,4 +1,5 @@
 using AMQPClient
+using JSON
 
 Base.exit_on_sigint(false)
 
@@ -35,7 +36,8 @@ function main(connection::AbstractConnection)
     println(" [*] Waiting for messages. To exit press CTRL+C")
 
     callback = rcvd_msg -> begin
-        msg_str = String(rcvd_msg.data)
+        payload = JSON.parse(String(rcvd_msg.data))
+        msg_str = payload["payload"]
         println(" [x] Received '$msg_str'")
         task_time = sum([1 for i = eachmatch(r".", msg_str)])
         sleep(task_time)

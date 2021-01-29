@@ -3,6 +3,7 @@ import pika
 import time
 import sys
 import os
+import json
 
 
 def main():
@@ -16,8 +17,10 @@ def main():
     print(' [*] Waiting for messages. To exit press CTRL+C')
 
     def callback(ch, method, properties, body):
-        print(" [x] Received %r" % body.decode())
-        task_time = body.count(b'.')
+        payload = json.loads(body.decode())
+        message = payload["payload"]
+        task_time = message.count('.')
+        print(" [x] Received %r" % message)
         time.sleep(task_time)
         print(" [x] Done %d seconds" % task_time)
         # It's time to remove the auto_ack flag and send a proper acknowledgment from the worker, once we're done with a task.
