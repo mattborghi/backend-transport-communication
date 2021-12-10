@@ -1,12 +1,14 @@
 import zmq
-import random
-import sys
 import time
+import os
 
 port = "5556"
+host = "*"
 context = zmq.Context()
 socket = context.socket(zmq.PAIR)
-socket.connect("tcp://localhost:%s" % port)
+socket.bind("tcp://%s:%s" % (host, port))
+# socket.bind(os.environ['CLIENT_CONNECT_URI'])
+print("client connected to tcp://%s:%s" % (host, port))
 
 # while True:
 for i in range(5):

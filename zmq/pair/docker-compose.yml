@@ -1,0 +1,19 @@
+services:
+
+  server:
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    container_name: server
+
+  client:
+    build: 
+      context: .
+      dockerfile: client.Dockerfile
+    container_name: client
+    # environment:
+    #   CLIENT_CONNECT_URI: tcp://server:5556
+    ports:
+      - 5556:5556 # zmq connection
+    # depends_on:
+    #   - server
